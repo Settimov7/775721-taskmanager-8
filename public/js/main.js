@@ -1,5 +1,6 @@
 'use strict';
 const MAX_CARDS = 10;
+const DEFAULT_QUANTITY = 7;
 const FILTERS = [
   {
     name: `all`,
@@ -349,9 +350,18 @@ const renderFilters = (filters) => {
 };
 
 const renderDefaultCards = () => {
-  const defaultQuantity = 7;
+  for (let i = 0; i < DEFAULT_QUANTITY; i++) {
+    boardTasks.innerHTML += renderCard();
+  }
+};
 
-  for (let i = 0; i < defaultQuantity; i++) {
+const changeCards = (target) => {
+  let sum = parseInt(target.querySelector(`span`).textContent, 10);
+  sum = (sum < 10 ? sum : MAX_CARDS);
+
+  boardTasks.innerHTML = ``;
+
+  for (let i = 0; i < sum; i++) {
     boardTasks.innerHTML += renderCard();
   }
 };
@@ -362,14 +372,7 @@ const onFilterClick = (evt) => {
   const target = evt.target.closest(`.filter__label`);
 
   if (target) {
-    let sum = parseInt(target.querySelector(`span`).textContent, 10);
-    sum = (sum < 10 ? sum : MAX_CARDS);
-
-    boardTasks.innerHTML = ``;
-
-    for (let i = 0; i < sum; i++) {
-      boardTasks.innerHTML += renderCard();
-    }
+    changeCards(target);
   }
 };
 
