@@ -1,4 +1,9 @@
-export default () => `<article class="card card--pink card--repeat">
+const MAX_CARDS = 10;
+const DEFAULT_QUANTITY = 7;
+
+const boardTasks = document.querySelector(`.board__tasks`);
+
+const createCard = () => `<article class="card card--pink card--repeat">
   <form class="card__form" method="get">
     <div class="card__inner">
       <div class="card__control">
@@ -290,3 +295,20 @@ export default () => `<article class="card card--pink card--repeat">
     </div>
   </form>
   </article>`;
+
+export const renderDefaultCards = () => {
+  for (let i = 0; i < DEFAULT_QUANTITY; i++) {
+    boardTasks.innerHTML += createCard();
+  }
+};
+
+export const changeCards = (target) => {
+  let sum = parseInt(target.querySelector(`span`).textContent, 10);
+  sum = (sum < 10 ? sum : MAX_CARDS);
+
+  boardTasks.innerHTML = ``;
+
+  for (let i = 0; i < sum; i++) {
+    boardTasks.innerHTML += createCard();
+  }
+};
