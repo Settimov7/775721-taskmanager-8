@@ -1,56 +1,9 @@
-'use strict';
 const MAX_CARDS = 10;
 const DEFAULT_QUANTITY = 7;
-const FILTERS = [
-  {
-    name: `all`,
-    sum: 15,
-    isChecked: true
-  },
-  {
-    name: `overdue`,
-    sum: 0
-  },
-  {
-    name: `today`,
-    sum: 0
-  },
-  {
-    name: `favorites`,
-    sum: 7
-  },
-  {
-    name: `repeating`,
-    sum: 2
-  },
-  {
-    name: `tags`,
-    sum: 6
-  },
-  {
-    name: `archive`,
-    sum: 115
-  }
-];
-const filterContainer = document.querySelector(`.main__filter`);
+
 const boardTasks = document.querySelector(`.board__tasks`);
 
-const renderFilter = ({name, sum, isChecked = false}) => `<input
-  type="radio"
-  id="filter__${ name }"
-  class="filter__input visually-hidden"
-  name="filter"
-  ${ isChecked ? `checked` : `` }
-  ${ !sum ? `disabled` : `` }
-/>
-<label
-  for="filter__${ name }"
-  class="filter__label"
->
-  ${ name.toUpperCase() } <span class="filter__${ name }-count">${ sum }</span>
-</label>`;
-
-const renderCard = () => `<article class="card card--pink card--repeat">
+const createCard = () => `<article class="card card--pink card--repeat">
   <form class="card__form" method="get">
     <div class="card__inner">
       <div class="card__control">
@@ -81,7 +34,7 @@ const renderCard = () => `<article class="card card--pink card--repeat">
             placeholder="Start typing your text here..."
             name="text"
           >
-It is example of repeating task. It marks by wave.</textarea
+  It is example of repeating task. It marks by wave.</textarea
           >
         </label>
       </div>
@@ -341,41 +294,21 @@ It is example of repeating task. It marks by wave.</textarea
       </div>
     </div>
   </form>
-</article>`;
+  </article>`;
 
-const renderFilters = (filters) => {
-  filters.forEach((filter) => {
-    filterContainer.innerHTML += renderFilter(filter);
-  });
-};
-
-const renderDefaultCards = () => {
+export const renderDefaultCards = () => {
   for (let i = 0; i < DEFAULT_QUANTITY; i++) {
-    boardTasks.innerHTML += renderCard();
+    boardTasks.innerHTML += createCard();
   }
 };
 
-const changeCards = (target) => {
+export const changeCards = (target) => {
   let sum = parseInt(target.querySelector(`span`).textContent, 10);
   sum = (sum < 10 ? sum : MAX_CARDS);
 
   boardTasks.innerHTML = ``;
 
   for (let i = 0; i < sum; i++) {
-    boardTasks.innerHTML += renderCard();
+    boardTasks.innerHTML += createCard();
   }
 };
-
-const onFilterClick = (evt) => {
-  evt.preventDefault();
-
-  const target = evt.target.closest(`.filter__label`);
-
-  if (target) {
-    changeCards(target);
-  }
-};
-
-renderFilters(FILTERS);
-renderDefaultCards();
-filterContainer.addEventListener(`click`, onFilterClick);
