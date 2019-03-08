@@ -1,5 +1,6 @@
 import {getRandomTask} from './data';
 import Task from './task';
+import TaskEdit from './task-edit';
 
 const MAX_CARDS = 10;
 const Default = {
@@ -13,7 +14,23 @@ const createCards = (quantity) => {
   let cards = document.createDocumentFragment();
 
   for (let i = 0; i < quantity; i++) {
-    cards.appendChild(new Task(getRandomTask()).render());
+    const task = getRandomTask();
+    const taskComponent = new Task(task);
+    const taskEditComponent = new TaskEdit(task);
+
+    taskComponent.onEdit = () => {
+      taskEditComponent.render();
+      taskComponent.element.parentElement.replaceChild(taskEditComponent.element, taskComponent.element);
+      taskComponent.unrender();
+    };
+
+    taskEditComponent.onSave = () => {
+      taskComponent.render();
+      taskEditComponent.element.parentElement.replaceChild(taskComponent.element, taskEditComponent.element);
+      taskEditComponent.unrender();
+    };
+
+    cards.appendChild(taskComponent.render());
   }
 
   return cards;

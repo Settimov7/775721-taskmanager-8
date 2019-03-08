@@ -1,7 +1,6 @@
 import {ClassName, createElement} from './util';
 
 import Hashtags from './hastags';
-import TaskEdit from './task-edit';
 
 export default class Task {
   constructor({color, title, tags, picture, dueDate, repeatingDays}) {
@@ -13,16 +12,17 @@ export default class Task {
     this._repeatingDays = repeatingDays;
 
     this._element = null;
+    this._onEdit = null;
+
+    this._onEditButtonClick = this._onEditButtonClick.bind(this);
+  }
+
+  set onEdit(func) {
+    this._onEdit = func;
   }
 
   get _isRepeat() {
-    for (let day in this._repeatingDays) {
-      if (this._repeatingDays[day]) {
-        return true;
-      }
-    }
-
-    return false;
+    return Object.values(this._repeatingDays).some((it) => it);
   }
 
   get _isDeadline() {
@@ -89,17 +89,21 @@ export default class Task {
   _onEditButtonClick(evt) {
     evt.preventDefault();
 
-    const taskEdit = new TaskEdit({color: this._color, title: this._title, tags: this._tags, picture: this._picture, dueDate: this._dueDate, repeatingDays: this._repeatingDays});
-    this._element.parentElement.replaceChild(taskEdit.render(), this._element);
-    this.unrender();
+    if (typeof this._onEdit === `function`) {
+      this._onEdit();
+    }
   }
 
   _addEventListener() {
-    this._element.querySelector(`.${ ClassName.BUTTON.EDIT }`).addEventListener(`click`, this._onEditButtonClick.bind(this));
+    this._element.querySelector(`.${ ClassName.BUTTON.EDIT }`).addEventListener(`click`, this._onEditButtonClick);
   }
 
   _removeEventListener() {
     this._element.querySelector(`.${ ClassName.BUTTON.EDIT }`).removeEventListener(`click`, this._onEditButtonClick);
+  }
+
+  get element() {
+    return this._element;
   }
 
   render() {

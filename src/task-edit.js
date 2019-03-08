@@ -1,7 +1,6 @@
 import {ClassName, createElement} from './util';
 
 import Hashtags from './hastags';
-import Task from './task';
 
 export default class TaskEdit {
   constructor({color, title, tags, picture, dueDate, repeatingDays}) {
@@ -13,16 +12,17 @@ export default class TaskEdit {
     this._repeatingDays = repeatingDays;
 
     this._element = null;
+    this._onSave = null;
+
+    this._onSaveButtonClick = this._onSaveButtonClick.bind(this);
+  }
+
+  set onSave(func) {
+    this._onSave = func;
   }
 
   get _isRepeat() {
-    for (let day in this._repeatingDays) {
-      if (this._repeatingDays[day]) {
-        return true;
-      }
-    }
-
-    return false;
+    return Object.values(this._repeatingDays).some((it) => it);
   }
 
   get _isDeadline() {
@@ -295,17 +295,21 @@ export default class TaskEdit {
   _onSaveButtonClick(evt) {
     evt.preventDefault();
 
-    const task = new Task({color: this._color, title: this._title, tags: this._tags, picture: this._picture, dueDate: this._dueDate, repeatingDays: this._repeatingDays});
-    this._element.parentElement.replaceChild(task.render(), this._element);
-    this.unrender();
+    if (typeof this._onSave === `function`) {
+      this._onSave();
+    }
   }
 
   _addEventListener() {
-    this._element.querySelector(`.${ ClassName.BUTTON.SAVE }`).addEventListener(`click`, this._onSaveButtonClick.bind(this));
+    this._element.querySelector(`.${ ClassName.BUTTON.SAVE }`).addEventListener(`click`, this._onSaveButtonClick);
   }
 
   _removeEventListener() {
     this._element.querySelector(`.${ ClassName.BUTTON.SAVE }`).removeEventListener(`click`, this._onSaveButtonClick);
+  }
+
+  get element() {
+    return this._element;
   }
 
   render() {
