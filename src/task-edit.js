@@ -1,19 +1,13 @@
 import {ClassName, createElement} from './util';
 
+import Task from './task';
 import Hashtags from './hastags';
 
-export default class TaskEdit {
-  constructor({color, title, tags, picture, dueDate, repeatingDays}) {
-    this._color = color;
-    this._title = title;
-    this._tags = tags;
-    this._picture = picture;
-    this._dueDate = new Date(dueDate);
-    this._repeatingDays = repeatingDays;
+export default class TaskEdit extends Task {
+  constructor(data) {
+    super(data);
 
-    this._element = null;
     this._onSave = null;
-
     this._onSaveButtonClick = this._onSaveButtonClick.bind(this);
   }
 
@@ -21,24 +15,8 @@ export default class TaskEdit {
     this._onSave = func;
   }
 
-  get _isRepeat() {
-    return Object.values(this._repeatingDays).some((it) => it);
-  }
-
-  get _isDeadline() {
-    return this._dueDate < new Date();
-  }
-
-  get _day() {
-    return `${ this._dueDate.toLocaleString(`en-US`, {day: `numeric`}) } ${ this._dueDate.toLocaleString(`en-US`, {month: `long`}) }`;
-  }
-
-  get _time() {
-    return `${ this._dueDate.toLocaleString(`en-US`, {hour: `numeric`, minute: `numeric`}) }`;
-  }
-
   get _tempalate() {
-    const classNames = `card card--edit card--${ this.color }${ this._isRepeat ? ` card--repeat` : `` }${ this._isDeadline ? ` card--deadline` : ``}`;
+    const classNames = `card card--edit card--${ this._color }${ this._isRepeat ? ` card--repeat` : `` }${ this._isDeadline ? ` card--deadline` : ``}`;
 
     return `<article class="${ classNames }">
       <form class="card__form" method="get">
@@ -308,20 +286,11 @@ export default class TaskEdit {
     this._element.querySelector(`.${ ClassName.BUTTON.SAVE }`).removeEventListener(`click`, this._onSaveButtonClick);
   }
 
-  get element() {
-    return this._element;
-  }
-
   render() {
     this._element = createElement(this._tempalate);
     this._element.querySelector(`.${ ClassName.HASHTAG.LIST }`).appendChild(new Hashtags(this._tags).render());
     this._addEventListener();
 
     return this._element;
-  }
-
-  unrender() {
-    this._removeEventListener();
-    this._element = null;
   }
 }

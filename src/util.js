@@ -7,6 +7,7 @@ export const ClassName = {
   HASHTAG: {
     LIST: `card__hashtag-list`,
   },
+  BOARD_TASKS: `board__tasks`,
 };
 
 export const getRandomNumber = (max) => Math.floor(Math.random() * max);

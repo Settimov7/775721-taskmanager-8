@@ -1,5 +1,8 @@
+import Tasks from './tasks';
 import filter from './filter';
-import {renderDefaultCards} from './card';
+import {ClassName} from './util';
 
 filter();
-renderDefaultCards();
+
+const tasks = new Tasks();
+document.querySelector(`.${ ClassName.BOARD_TASKS }`).replaceWith(tasks.render());
