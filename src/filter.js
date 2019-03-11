@@ -1,4 +1,7 @@
-import {changeCards} from './card';
+import {ClassName} from './util';
+import Tasks from './tasks';
+
+const MAX_TASKS = 10;
 
 const FILTERS = [
   {
@@ -55,7 +58,13 @@ const onFilterClick = (evt) => {
   const target = evt.target.closest(`.filter__label`);
 
   if (target) {
-    changeCards(target);
+    // changeCards(target);
+
+    let sum = parseInt(target.querySelector(`span`).textContent, 10);
+    sum = (sum < 10 ? sum : MAX_TASKS);
+
+    const newTasks = new Tasks(sum);
+    document.querySelector(`.${ ClassName.BOARD_TASKS }`).replaceWith(newTasks.render());
   }
 };
 
