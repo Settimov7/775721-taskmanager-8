@@ -1,6 +1,7 @@
 import {ClassName} from './util';
 
 import Task from './task';
+import moment from 'moment';
 
 export default class TaskDefault extends Task {
   constructor(data) {
@@ -53,6 +54,9 @@ export default class TaskDefault extends Task {
 
           <div class="card__settings">
             <div class="card__details">
+              <div class="card__dates">
+                ${ moment(this._dueDate).format(`DD MMMM hh:m`) }
+              </div>
               <div class="card__hashtag">
                 <div class="card__hashtag-list">
                   ${ (Array.from(this._tags).map((tag) => (`
