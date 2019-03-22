@@ -17,13 +17,15 @@ export default class Component {
     return this._element;
   }
 
-  _addEventListeners() {}
+  _addEventListener() {}
 
   _removeEventListener() {}
 
+  update() {}
+
   render() {
     this._element = createElement(this._template);
-    this._addEventListeners();
+    this._addEventListener();
 
     return this._element;
   }

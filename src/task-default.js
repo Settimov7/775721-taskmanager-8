@@ -1,7 +1,6 @@
-import {ClassName, createElement} from './util';
+import {ClassName} from './util';
 
 import Task from './task';
-import Hashtags from './hastags';
 
 export default class TaskDefault extends Task {
   constructor(data) {
@@ -15,7 +14,7 @@ export default class TaskDefault extends Task {
     this._onEdit = func;
   }
 
-  get _tempalate() {
+  get _template() {
     const classNames = `card card--${ this._color }${ this._isRepeat ? ` card--repeat` : `` }${ this._isDeadline ? ` card--deadline` : ``}`;
 
     return `<article class="${ classNames }">
@@ -56,6 +55,12 @@ export default class TaskDefault extends Task {
             <div class="card__details">
               <div class="card__hashtag">
                 <div class="card__hashtag-list">
+                  ${ (Array.from(this._tags).map((tag) => (`
+                        <span class="card__hashtag-inner">
+                          <input type="hidden" name="hashtag" value="${ tag }" class="card__hashtag-hidden-input" />
+                          <button type="button" class="card__hashtag-name">#${ tag }</button>
+                          <button type="button" class="card__hashtag-delete">delete</button>
+                        </span>`.trim()))).join(``) }
                 </div>
               </div>
             </div>
@@ -78,13 +83,5 @@ export default class TaskDefault extends Task {
 
   _removeEventListener() {
     this._element.querySelector(`.${ ClassName.BUTTON.EDIT }`).removeEventListener(`click`, this._onEditButtonClick);
-  }
-
-  render() {
-    this._element = createElement(this._tempalate);
-    this._element.querySelector(`.${ ClassName.HASHTAG.LIST }`).appendChild(new Hashtags(this._tags).render());
-    this._addEventListener();
-
-    return this._element;
   }
 }

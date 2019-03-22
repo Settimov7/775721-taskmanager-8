@@ -35,7 +35,13 @@ export default class Tasks extends Component {
         task.unrender();
       };
 
-      taskEdit.onSave = () => {
+      taskEdit.onSave = (newObject) => {
+        data.title = newObject.title;
+        data.tags = newObject.tags;
+        data.color = newObject.color;
+        data.repeatingDays = newObject.repeatingDays;
+
+        task.update(data);
         task.render();
         taskEdit.element.parentElement.replaceChild(task.element, taskEdit.element);
         taskEdit.unrender();
@@ -55,7 +61,7 @@ export default class Tasks extends Component {
 
   render() {
     this._element = createElement(this._template);
-    this._addEventListeners();
+    this._addEventListener();
 
     this.renderTasks();
     return this._element;

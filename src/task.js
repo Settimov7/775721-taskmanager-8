@@ -27,4 +27,11 @@ export default class Task extends Component {
   get _time() {
     return `${ this._dueDate.toLocaleString(`en-US`, {hour: `numeric`, minute: `numeric`}) }`;
   }
+
+  update({color, title, tags, repeatingDays}) {
+    this._color = color;
+    this._title = title;
+    this._tags = tags;
+    this._repeatingDays = repeatingDays;
+  }
 }
