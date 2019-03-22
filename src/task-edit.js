@@ -1,4 +1,5 @@
 import flatpickr from 'flatpickr';
+import moment from 'moment';
 
 import {ClassName} from './util';
 
@@ -24,6 +25,7 @@ export default class TaskEdit extends Task {
       title: ``,
       color: ``,
       tags: new Set(),
+      dueDate: this._dueDate,
       repeatingDays: {
         mo: false,
         tu: false,
@@ -52,6 +54,18 @@ export default class TaskEdit extends Task {
       hashtag: (value) => target.tags.add(value),
       text: (value) => {
         target.title = value;
+      },
+      date: (value) => {
+        if (value) {
+          target.dueDate.setDate(flatpickr.parseDate(value, `d`).getDate());
+          target.dueDate.setMonth(new Date(value).getMonth());
+        }
+      },
+      time: (value) => {
+        if (value) {
+          target.dueDate.setHours(flatpickr.parseDate(value, `H`).getHours());
+          target.dueDate.setMinutes(value.split(`:`)[1].split(` `)[0]);
+        }
       },
       color: (value) => {
         target.color = value;
@@ -112,11 +126,11 @@ export default class TaskEdit extends Task {
 
                 <fieldset class="card__date-deadline" ${!this._state.isDate && `disabled`}>
                   <label class="card__input-deadline-wrap">
-                    <input class="card__date" type="text" placeholder="23 September" name="date" />
+                    <input class="card__date" type="text" placeholder="${ moment(this._dueDate).format(`DD MMMM`) }" name="date" />
                   </label>
 
                   <label class="card__input-deadline-wrap">
-                    <input class="card__time" type="text" placeholder="11:15 PM" name="time" />
+                    <input class="card__time" type="text" placeholder="${ moment(this._dueDate).format(`hh:mm A`) }" name="time" />
                   </label>
                 </fieldset>
 

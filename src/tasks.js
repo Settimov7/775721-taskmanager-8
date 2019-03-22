@@ -39,6 +39,7 @@ export default class Tasks extends Component {
         data.title = newObject.title;
         data.tags = newObject.tags;
         data.color = newObject.color;
+        data.dueDate = newObject.dueDate;
         data.repeatingDays = newObject.repeatingDays;
 
         task.update(data);

@@ -55,7 +55,7 @@ export default class TaskDefault extends Task {
           <div class="card__settings">
             <div class="card__details">
               <div class="card__dates">
-                ${ moment(this._dueDate).format(`DD MMMM hh:m`) }
+                ${ moment(this._dueDate).format(`DD MMMM hh:mm`) }
               </div>
               <div class="card__hashtag">
                 <div class="card__hashtag-list">
